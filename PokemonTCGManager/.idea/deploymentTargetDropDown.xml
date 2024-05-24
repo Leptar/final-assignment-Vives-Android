@@ -5,6 +5,21 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="daoDeleteDeck_deletesAllDecksFromDB()">
+        <State />
+      </entry>
+      <entry key="daoDeleteUsers_deletesAllUsersFromDB()">
+        <State />
+      </entry>
+      <entry key="daoGetAllDeck_returnsAllDecksFromDB()">
+        <State />
+      </entry>
+      <entry key="daoGetDeck_returnsDeckFromDB()">
+        <State />
+      </entry>
+      <entry key="daoUpdateDecks_updatesDecksInDB()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
