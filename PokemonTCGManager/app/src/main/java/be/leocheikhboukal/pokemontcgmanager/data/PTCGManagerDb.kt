@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
 import be.leocheikhboukal.pokemontcgmanager.data.deck.DeckDao
 import be.leocheikhboukal.pokemontcgmanager.data.user.User
 import be.leocheikhboukal.pokemontcgmanager.data.user.UserDao
 
+@TypeConverters(Converters::class)
 @Database(entities = [User::class, Deck::class], version = 1)
 abstract class PTCGManagerDb : RoomDatabase() {
 

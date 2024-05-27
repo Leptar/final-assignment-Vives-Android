@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="HomeBodyEmptyListPreview">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
@@ -9,9 +12,6 @@
         <State />
       </entry>
       <entry key="daoDeleteUsers_deletesAllUsersFromDB()">
-        <State />
-      </entry>
-      <entry key="daoGetAllDeck_returnsAllDecksFromDB()">
         <State />
       </entry>
       <entry key="daoGetDeck_returnsDeckFromDB()">

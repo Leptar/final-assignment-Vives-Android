@@ -15,18 +15,19 @@ interface AppContainer {
 }
 
 /**
- * [AppContainer] implementation that provides instance of [OfflineItemsRepository]
+ * [AppContainer] implementation that provides instance of [OfflineUsersRepository]
+ * and [OfflineDecksRepository]
  */
 class AppDataContainer(private val context: Context) : AppContainer {
     /**
-     * Implementation for [ItemsRepository]
+     * Implementation for [UserRepository]
      */
     override val usersRepository: UserRepository by lazy {
         OfflineUsersRepository(PTCGManagerDb.getDatabase(context).userDao())
     }
 
     /**
-     * Implementation for [ItemsRepository]
+     * Implementation for [DecksRepository]
      */
     override val decksRepository: DecksRepository by lazy {
         OfflineDecksRepository(PTCGManagerDb.getDatabase(context).deckDao())
