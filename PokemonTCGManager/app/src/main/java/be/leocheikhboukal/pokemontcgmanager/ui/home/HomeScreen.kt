@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -93,12 +94,16 @@ private fun HomeBody(
         modifier = Modifier
             .padding(contentPadding)
             .padding(horizontal = 68.dp, vertical = 150.dp)
-            .background(Color.Red)
-            .border(2.dp, Color.Black, RoundedCornerShape(10.dp)),
+            .background(Color.Red),
     ){
         Column(
             modifier = Modifier
                 .background(Color.White)
+                .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .padding(horizontal = 2.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
