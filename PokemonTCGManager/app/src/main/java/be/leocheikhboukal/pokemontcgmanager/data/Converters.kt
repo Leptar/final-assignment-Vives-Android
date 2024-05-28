@@ -17,5 +17,4 @@ class Converters {
             .replace("]","")
             .replace(" ","")
             .split(",")
-
 }

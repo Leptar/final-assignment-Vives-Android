@@ -4,9 +4,12 @@ import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,8 +22,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,7 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -44,25 +51,35 @@ import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import java.io.File
 
-
 object HomeDestination : NavigationDestination {
     override val route = "home"
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color(252, 61, 61))
-    ) {
-        PTCGManagerTitleAppBar()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-        HomeBody(userList = homeUiState.userList)
+    Scaffold(
+        modifier = modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(Color(252, 61, 61)),
+        topBar = {
+            PTCGManagerTitleAppBar(
+                scrollBehavior = scrollBehavior
+            )
+        },
+        containerColor = Color(252,61,61),
+    ) { innerPadding ->
+        HomeBody(
+            userList = homeUiState.userList,
+            contentPadding = innerPadding,
+            modifier = modifier
+        )
     }
 }
 
@@ -70,28 +87,35 @@ fun HomeScreen(
 private fun HomeBody(
     userList: List<User>,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    Box (
-        contentAlignment = Alignment.TopCenter,
+    Box(
         modifier = Modifier
-            .padding(horizontal = 80.dp, vertical = 200.dp)
-            .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
-            .background(Color.White)
+            .padding(contentPadding)
+            .padding(horizontal = 68.dp, vertical = 150.dp)
+            .background(Color.Red)
+            .border(2.dp, Color.Black, RoundedCornerShape(10.dp)),
     ){
         Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .background(Color.White)
+                .padding(horizontal = 2.dp, vertical = 2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Select your Profile",
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
-                modifier = Modifier.padding(5.dp)
+                modifier = Modifier.padding(bottom = 5.dp)
             )
+
 
             if(userList.isNotEmpty()) {
                 LazyVerticalGrid (
-                    columns = GridCells.Adaptive(90.dp),
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .background(Color.White)
                         .fillMaxWidth()
@@ -132,6 +156,8 @@ private fun HomeBody(
             }
         }
     }
+
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,7 +173,8 @@ fun UserProfileCard(user: User, modifier: Modifier) {
     ) {
         Column (
            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
         ) {
             if (user.data != null) {
                 val bmp = BitmapFactory.decodeByteArray(
@@ -177,18 +204,33 @@ fun UserProfileCard(user: User, modifier: Modifier) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun HomeBodyPreview() {
     val file = File("D:\\Cours\\Vives\\Android\\Final_assignment\\images.png")
     PokemonTCGManagerTheme {
-        HomeBody(
-            listOf(
-                User(id = 0, name = "Leptar", data = file.readBytes()),
-                User(id = 0, name = "Leptar", data = file.readBytes()),
-                User(id = 0, name = "Leptar", data = file.readBytes()),
-                User(id = 0, name = "Leptar", data = file.readBytes())
-            )
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        Scaffold(
+            topBar = {
+                PTCGManagerTitleAppBar(
+                    scrollBehavior = scrollBehavior
+                )
+            },
+            content = { innerPadding ->
+                HomeBody(
+                    userList = listOf(
+                        User(id = 0, name = "Leptar", data = file.readBytes()),
+                        User(id = 0, name = "Leptar", data = file.readBytes()),
+                        User(id = 0, name = "Leptar", data = file.readBytes()),
+                        User(id = 0, name = "Leptar", data = file.readBytes())),
+                    contentPadding = innerPadding,
+                )
+            },
+            containerColor = Color(252,61,61),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+
         )
     }
 }
