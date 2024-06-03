@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineUsersRepository(private val userDao: UserDao) : UserRepository {
     override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllUser()
 
-    override fun getUserAndDecksStream(id: Int): Flow<userWithDecks?> = userDao.getUserAndDeck(id)
+    override fun getUserAndDecksStream(id: Int): Flow<UserWithDecks?> = userDao.getUserAndDeck(id)
 
     override fun getUser(id: Int): Flow<User> = userDao.getUser(id)
 

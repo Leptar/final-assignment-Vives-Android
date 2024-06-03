@@ -6,7 +6,7 @@ interface UserRepository {
 
     fun getAllUsersStream(): Flow<List<User>>
 
-    fun getUserAndDecksStream(id: Int): Flow<userWithDecks?>
+    fun getUserAndDecksStream(id: Int): Flow<UserWithDecks?>
 
     fun getUser(id: Int): Flow<User>
 

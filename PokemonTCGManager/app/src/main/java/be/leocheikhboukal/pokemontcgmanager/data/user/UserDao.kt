@@ -16,7 +16,7 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * from Users WHERE id = :id")
-    fun getUserAndDeck(id: Int): Flow<userWithDecks>
+    fun getUserAndDeck(id: Int): Flow<UserWithDecks>
 
     @Query("SELECT * FROM Users WHERE id = :id")
     fun getUser(id: Int): Flow<User>

@@ -2,10 +2,12 @@ package be.leocheikhboukal.pokemontcgmanager.ui
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import be.leocheikhboukal.pokemontcgmanager.PokemonTCGManagerApplication
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.profile.ProfileAddViewModel
 
@@ -24,6 +26,13 @@ object AppViewModelProvider {
             ProfileAddViewModel(PokemonTCGManagerApplication().container.usersRepository)
         }
 
+        // Initializer for DecksListViewModel
+        initializer {
+            DecksListViewModel(
+                this.createSavedStateHandle(),
+                PokemonTCGManagerApplication().container.usersRepository
+            )
+        }
     }
 }
 

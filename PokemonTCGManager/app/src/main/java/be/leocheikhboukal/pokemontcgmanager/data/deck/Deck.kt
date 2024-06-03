@@ -24,5 +24,6 @@ data class Deck(
     val name: String,
     val description: String,
     val cardList: List<String>,
+    val color: Int,
     val userId: Int
 )

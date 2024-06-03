@@ -6,6 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.profile.ProfileAddDestination
@@ -34,6 +37,12 @@ fun PTCGManagerNavHost(
                navigateBack = { navController.popBackStack() },
                onNavigateUp = { navController.navigateUp() }
            )
+        }
+        composable(
+            route = DecksListDestination.routeWithArgs,
+            arguments = listOf(navArgument(DecksListDestination.routeWithArgs) { type = NavType.IntType })
+        ) {
+            DecksListScreen()
         }
     }
 }
