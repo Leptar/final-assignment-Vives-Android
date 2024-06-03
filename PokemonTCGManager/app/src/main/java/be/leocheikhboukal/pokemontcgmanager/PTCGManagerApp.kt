@@ -39,34 +39,6 @@ fun PTCGManagerTitleAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
-    /**
-    Row (
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .background(Color(32,32,32))
-            .fillMaxWidth()
-            .padding(5.dp)
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.title_default_image),
-            contentDescription = "",
-            modifier = Modifier
-                .background(Color(32,32,32), RoundedCornerShape(40.dp))
-                .size(80.dp)
-                .padding(5.dp)
-        )
-
-        Text(
-            text = "POKEMON \nTCG MANAGER",
-            fontWeight = FontWeight.Black,
-            fontStyle = FontStyle.Italic,
-            fontSize = 32.sp,
-            lineHeight = 30.sp,
-            color = Color.White
-        )
-    }
-    */
 
     CenterAlignedTopAppBar(
         title = {

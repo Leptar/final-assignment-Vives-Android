@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import be.leocheikhboukal.pokemontcgmanager.PokemonTCGManagerApplication
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.profile.ProfileAddViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
@@ -17,6 +18,12 @@ object AppViewModelProvider {
         initializer {
             HomeViewModel(PokemonTCGManagerApplication().container.usersRepository)
         }
+
+        // Initializer for ProfileAddViewModel
+        initializer {
+            ProfileAddViewModel(PokemonTCGManagerApplication().container.usersRepository)
+        }
+
     }
 }
 

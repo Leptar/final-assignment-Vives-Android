@@ -26,11 +26,11 @@ class DbDaoTest {
     private lateinit var deckDao: DeckDao
     private lateinit var userDao: UserDao
     private lateinit var pokemonTCGManagerDb: PTCGManagerDb
-    private val user1 = User(1, "Leptar", null)
-    private val user2 = User(2, "Youna", null)
+    private val user1 = User(1, "Leptar", 1)
+    private val user2 = User(2, "Youna", 2)
     private val deck1 = Deck(1, "Fun", "deck non competitif, pour les copaing", null,listOf(), 1)
     private val deck2 = Deck(2, "Try hard", "volonté de nuire", null, listOf(), 1)
-    private val MissmatchDeck = Deck(3, "Try hard", "volonté de nuire", null, listOf(), 9)
+    private val missmatchDeck = Deck(3, "Try hard", "volonté de nuire", null, listOf(), 9)
 
 
     @Before
@@ -63,10 +63,10 @@ class DbDaoTest {
         addOneUserToDb()
         addOneDeckToDb()
         val allDecks = deckDao.getAllDecks().first()
-        assertEquals(allDecks[0], deck1)
+        assertEquals(allDecks[0].toString(), deck1.toString())
 
         try {
-            deckDao.insert(MissmatchDeck)
+            deckDao.insert(missmatchDeck)
 
             fail("Missmatch deck test fail : insert method succeed ")
         } catch (_ : Exception) {
@@ -89,8 +89,8 @@ class DbDaoTest {
         addOneUserToDb()
         addTwoDeckToDb()
         val allDecks = deckDao.getAllDecks().first()
-        assertEquals(allDecks[0], deck1)
-        assertEquals(allDecks[1], deck2)
+        assertEquals(allDecks[0].toString(), deck1.toString())
+        assertEquals(allDecks[1].toString(), deck2.toString())
     }
 
     @Test
@@ -107,7 +107,7 @@ class DbDaoTest {
         addOneUserToDb()
         addOneDeckToDb()
         val deck = deckDao.getDeck(1)
-        assertEquals(deck.first(), deck1)
+        assertEquals(deck.first().toString(), deck1.toString())
     }
 
     @Test
@@ -138,12 +138,12 @@ class DbDaoTest {
     @Throws(Exception::class)
     fun daoUpdateUsers_updatesUsersInDB() = runBlocking {
         addTwoUserToDb()
-        userDao.update(User(1, "Parench", null))
-        userDao.update(User(2, "Naomie", null))
+        userDao.update(User(1, "Parench", 1))
+        userDao.update(User(2, "Naomie", 2))
 
         val allUsers = userDao.getAllUser().first()
-        assertEquals(allUsers[0], User(1, "Parench", null))
-        assertEquals(allUsers[1], User(2, "Naomie", null))
+        assertEquals(allUsers[0], User(1, "Parench", 1))
+        assertEquals(allUsers[1], User(2, "Naomie", 2))
     }
 
     @Test
@@ -155,8 +155,8 @@ class DbDaoTest {
         deckDao.update(Deck(2, "Try hard", "volonté de nuire", null,listOf(), 2))
 
         val allDecks = deckDao.getAllDecks().first()
-        assertEquals(allDecks[1], Deck(1, "fun/serieux", "mode serieux avec les copaings", null,listOf(), 1))
-        assertEquals(allDecks[0], Deck(2, "Try hard", "volonté de nuire", null,listOf(), 2))
+        assertEquals(allDecks[1].toString(), Deck(1, "fun/serieux", "mode serieux avec les copaings", null,listOf(), 1).toString())
+        assertEquals(allDecks[0].toString(), Deck(2, "Try hard", "volonté de nuire", null,listOf(), 2).toString())
     }
 
 

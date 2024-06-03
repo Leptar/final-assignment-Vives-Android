@@ -1,20 +1,16 @@
 package be.leocheikhboukal.pokemontcgmanager.ui.home
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,10 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +44,6 @@ import be.leocheikhboukal.pokemontcgmanager.data.user.User
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
-import java.io.File
 
 object HomeDestination : NavigationDestination {
     override val route = "home"
@@ -93,12 +86,11 @@ private fun HomeBody(
     Box(
         modifier = Modifier
             .padding(contentPadding)
-            .padding(horizontal = 68.dp, vertical = 150.dp)
-            .background(Color.Red),
+            .padding(horizontal = 68.dp, vertical = 150.dp),
     ){
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(Color(252, 61, 61))
                 .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
                 .background(
                     color = MaterialTheme.colorScheme.surface,
@@ -181,24 +173,17 @@ fun UserProfileCard(user: User, modifier: Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            if (user.data != null) {
-                val bmp = BitmapFactory.decodeByteArray(
-                    user.data, 0, user.data!!.size
-                ).asImageBitmap()
-
-                Image(
-                    bitmap = bmp,
-                    contentDescription = "",
-                    modifier = modifier.size(90.dp)
-                )
-
-            } else {
-                Image(
-                    painter = painterResource(R.drawable.title_default_image),
-                    contentDescription = "Default Image",
-                    modifier = modifier.size(90.dp)
-                )
+            val image = when(user.color) {
+                1 -> painterResource(R.drawable.red)
+                2 -> painterResource(R.drawable.blue)
+                3 -> painterResource(R.drawable.yellow)
+                4 -> painterResource(R.drawable.purple)
+                else -> {
+                    painterResource(R.drawable.ic_broken_image)
+                }
             }
+
+            Image(painter = image, contentDescription = null, modifier = Modifier)
 
             Text(text = user.name)
 
@@ -213,7 +198,6 @@ fun UserProfileCard(user: User, modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun HomeBodyPreview() {
-    val file = File("D:\\Cours\\Vives\\Android\\Final_assignment\\images.png")
     PokemonTCGManagerTheme {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         Scaffold(
@@ -225,10 +209,10 @@ fun HomeBodyPreview() {
             content = { innerPadding ->
                 HomeBody(
                     userList = listOf(
-                        User(id = 0, name = "Leptar", data = file.readBytes()),
-                        User(id = 0, name = "Leptar", data = file.readBytes()),
-                        User(id = 0, name = "Leptar", data = file.readBytes()),
-                        User(id = 0, name = "Leptar", data = file.readBytes())),
+                        User(id = 0, name = "Leptar", color = 1),
+                        User(id = 0, name = "Odonata", color = 2),
+                        User(id = 0, name = "LemonSqueezer", color = 3),
+                        User(id = 0, name = "Naomie", color = 4)),
                     contentPadding = innerPadding,
                 )
             },
@@ -251,10 +235,9 @@ fun HomeBodyEmptyListPreview() {
 @Preview(showBackground = true)
 @Composable
 fun UserProfilePreview() {
-    val file = File("D:\\Cours\\Vives\\Android\\Final_assignment\\images.png")
     PokemonTCGManagerTheme {
         UserProfileCard(
-            User(id = 0, name = "Leptar", data = file.readBytes() ),
+            User(id = 0, name = "Leptar", color = 1),
             modifier = Modifier
         )
     }
