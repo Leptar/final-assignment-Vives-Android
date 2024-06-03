@@ -23,8 +23,6 @@ data class Deck(
     val id: Int = 0,
     val name: String,
     val description: String,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    var image: ByteArray? = null,
     val cardList: List<String>,
     val userId: Int
 )
