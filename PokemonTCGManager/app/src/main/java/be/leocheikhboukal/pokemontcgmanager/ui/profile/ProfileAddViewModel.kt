@@ -34,7 +34,7 @@ class ProfileAddViewModel(private val usersRepository: UserRepository) : ViewMod
 
     private fun validateInput(uiState: ProfileDetails = profileAddUiState.profileDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank()
+            name.isNotBlank() && name.length <= 9 && color > 0 && color < 5
         }
     }
 }
@@ -50,7 +50,7 @@ data class ProfileAddUiState(
 data class ProfileDetails(
     val id: Int = 0,
     val name: String = "",
-    val color: Int = 1
+    var color: Int = 0
 )
 
 fun ProfileDetails.toUser(): User {

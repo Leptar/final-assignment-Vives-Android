@@ -53,6 +53,7 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navigateProfileAdd: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
@@ -72,6 +73,7 @@ fun HomeScreen(
         HomeBody(
             userList = homeUiState.userList,
             contentPadding = innerPadding,
+            navigateProfileAdd = navigateProfileAdd,
             modifier = modifier
         )
     }
@@ -81,12 +83,13 @@ fun HomeScreen(
 private fun HomeBody(
     userList: List<User>,
     modifier: Modifier = Modifier,
+    navigateProfileAdd: () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     Box(
         modifier = Modifier
             .padding(contentPadding)
-            .padding(horizontal = 68.dp, vertical = 150.dp),
+            .padding(top = 150.dp, start = 68.dp, end = 68.dp),
     ){
         Column(
             modifier = Modifier
@@ -143,11 +146,17 @@ private fun HomeBody(
                 textAlign = TextAlign.Center
             )
             TextButton(
-                onClick = {  },
+                onClick = {
+                    if(userList.size >= 4) {
+                        /*TODO Pop up alert no more profile*/
+                    } else {
+                        navigateProfileAdd()
+                    }
+                },
                 modifier = Modifier
             ) {
                 Text(
-                    text = "Create a new profile !",
+                    text = "Create a new profile ! (4 max)",
                     textDecoration = TextDecoration.Underline
                 )
             }

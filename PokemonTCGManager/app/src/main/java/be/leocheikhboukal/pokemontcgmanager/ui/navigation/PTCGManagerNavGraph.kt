@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.profile.ProfileAddDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.profile.ProfileAddScreen
 
 /**
  * Navigation graph for the application
@@ -23,7 +25,15 @@ fun PTCGManagerNavHost(
         modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
-            HomeScreen()
+            HomeScreen(
+                navigateProfileAdd = { navController.navigate(ProfileAddDestination.route) }
+            )
+        }
+        composable(route = ProfileAddDestination.route) {
+           ProfileAddScreen(
+               navigateBack = { navController.popBackStack() },
+               onNavigateUp = { navController.navigateUp() }
+           )
         }
     }
 }
