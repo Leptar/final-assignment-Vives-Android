@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import be.leocheikhboukal.pokemontcgmanager.PTCGManagerSubAppBar
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
 import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
@@ -81,26 +81,37 @@ fun DecksListScreen(
         },
         containerColor = Color(252,61,61),
     ) { innerPadding ->
-        DecksListBody(
-            modifier = Modifier,
-            uiState = uiState.value,
-            contentPadding = innerPadding,
-            onCreateDeckClick = {}
-        )
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+            PTCGManagerSubAppBar(
+                userId = uiState.value.user.id,
+                navigateToCardSearch = navigateToCardSearch,
+                navigateToDecksList = navigateToDeck,
+                navigateToProfile = navigateToUser
+            )
+            DecksListBody(
+                modifier = Modifier,
+                uiState = uiState.value,
+                onDeckClick = navigateToDeck,
+                onCreateDeckClick = navigateToDeckCreate
+            )
+        }
+
     }
 }
 
 @Composable
 fun DecksListBody(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues,
-    onCreateDeckClick: () -> Unit,
+    onDeckClick: (Int) -> Unit,
+    onCreateDeckClick: (Int) -> Unit,
     uiState: UserWithDecksUiState
 ) {
 
     Column(
         modifier = modifier
-            .padding(contentPadding)
             .background(Color(252, 61, 61)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
@@ -150,7 +161,7 @@ fun DecksListBody(
                     items(uiState.decks) { deck ->
                         DecksCard(
                             deck = deck,
-                            onClick = {}
+                            onClick = onDeckClick
                         )
                     }
                 }
@@ -162,7 +173,7 @@ fun DecksListBody(
             verticalAlignment = Alignment.Bottom,
         ){
             Button(
-                onClick = onCreateDeckClick,
+                onClick = {onCreateDeckClick(uiState.user.id)},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(117,255,114),
                     contentColor = Color.Black
@@ -189,10 +200,10 @@ fun DecksListBody(
 fun DecksCard(
     modifier: Modifier = Modifier,
     deck: Deck,
-    onClick: () -> Unit
+    onClick: (Int) -> Unit
 ) {
     Card (
-        onClick = onClick,
+        onClick = { onClick(deck.id) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
@@ -231,8 +242,8 @@ fun DecksCard(
 fun DecksListBodyPreview() {
     PokemonTCGManagerTheme {
         DecksListBody(
-            contentPadding = PaddingValues(0.dp),
-            onCreateDeckClick = { /*TODO*/ },
+            onCreateDeckClick = {},
+            onDeckClick = {},
             uiState = UserWithDecksUiState(
                 User(1, "Test", 1),
                 listOf(
@@ -251,8 +262,8 @@ fun DecksListBodyPreview() {
 fun DecksListBodyEmptyPreview() {
     PokemonTCGManagerTheme {
         DecksListBody(
-            contentPadding = PaddingValues(0.dp),
-            onCreateDeckClick = { /*TODO*/ },
+            onDeckClick = {},
+            onCreateDeckClick = {},
             uiState = UserWithDecksUiState(
                 User(1, "Test", 1),
                 listOf()

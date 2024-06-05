@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -110,8 +109,7 @@ fun PTCGManagerSubAppBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.Transparent)
-            .padding(0.dp),
+            .background(Color.White),
         verticalAlignment = Alignment.Top
     ) {
         Button(
@@ -121,7 +119,6 @@ fun PTCGManagerSubAppBar(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(32, 32, 32),
             ),
-            contentPadding = PaddingValues(0.dp),
             content = {
                 Text(
                     text = "Cards",
@@ -139,7 +136,6 @@ fun PTCGManagerSubAppBar(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(32, 32, 32),
             ),
-            contentPadding = PaddingValues(0.dp),
             content = {
                 Text(
                     text = "Decks",
@@ -156,7 +152,6 @@ fun PTCGManagerSubAppBar(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(32, 32, 32),
             ),
-            contentPadding = PaddingValues(0.dp),
             content = {
                 Text(
                     text = "Profile",
