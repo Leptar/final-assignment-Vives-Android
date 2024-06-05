@@ -16,7 +16,7 @@ class DecksListViewModel(
     savedStateHandle: SavedStateHandle,
     private val usersRepository: UserRepository
 ) : ViewModel() {
-    private val userId: Int = checkNotNull(savedStateHandle[DecksListDestination.userIdArg])
+    private val userId: Int = checkNotNull(savedStateHandle[DecksListDestination.USER_ID_ARG])
 
     val stateFlowUiState: StateFlow<UserWithDecksUiState> =
         usersRepository.getUserAndDecksStream(userId)

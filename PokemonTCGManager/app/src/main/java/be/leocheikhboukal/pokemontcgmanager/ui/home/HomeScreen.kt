@@ -53,6 +53,7 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navigateToDecksUser: (Int) -> Unit,
     navigateProfileAdd: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -73,6 +74,7 @@ fun HomeScreen(
         HomeBody(
             userList = homeUiState.userList,
             contentPadding = innerPadding,
+            navigateToDecksUser = navigateToDecksUser,
             navigateProfileAdd = navigateProfileAdd,
             modifier = modifier
         )
@@ -83,6 +85,7 @@ fun HomeScreen(
 private fun HomeBody(
     userList: List<User>,
     modifier: Modifier = Modifier,
+    navigateToDecksUser: (Int) -> Unit,
     navigateProfileAdd: () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -122,6 +125,7 @@ private fun HomeBody(
                 ) {
                     items(userList) { user ->
                         UserProfileCard(
+                            navigateToDecksUser = navigateToDecksUser,
                             user = user,
                             modifier = modifier
                         )
@@ -168,9 +172,13 @@ private fun HomeBody(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserProfileCard(user: User, modifier: Modifier) {
+fun UserProfileCard(
+    navigateToDecksUser: (Int) -> Unit,
+    user: User,
+    modifier: Modifier
+) {
     Card (
-        onClick = { },
+        onClick = { navigateToDecksUser(user.id) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
@@ -223,6 +231,8 @@ fun HomeBodyPreview() {
                         User(id = 0, name = "LemonSqueezer", color = 3),
                         User(id = 0, name = "Naomie", color = 4)),
                     contentPadding = innerPadding,
+                    navigateToDecksUser = {},
+                    modifier = Modifier
                 )
             },
             containerColor = Color(252,61,61),
@@ -237,7 +247,10 @@ fun HomeBodyPreview() {
 @Composable
 fun HomeBodyEmptyListPreview() {
     PokemonTCGManagerTheme {
-        HomeBody(listOf())
+        HomeBody(
+            listOf(),
+            navigateToDecksUser = {},
+            modifier = Modifier)
     }
 }
 
@@ -246,6 +259,7 @@ fun HomeBodyEmptyListPreview() {
 fun UserProfilePreview() {
     PokemonTCGManagerTheme {
         UserProfileCard(
+            navigateToDecksUser = {},
             User(id = 0, name = "Leptar", color = 1),
             modifier = Modifier
         )

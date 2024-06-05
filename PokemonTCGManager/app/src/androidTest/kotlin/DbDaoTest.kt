@@ -28,9 +28,9 @@ class DbDaoTest {
     private lateinit var pokemonTCGManagerDb: PTCGManagerDb
     private val user1 = User(1, "Leptar", 1)
     private val user2 = User(2, "Youna", 2)
-    private val deck1 = Deck(1, "Fun", "deck non competitif, pour les copaing", listOf(), 1)
-    private val deck2 = Deck(2, "Try hard", "volonté de nuire", listOf(), 1)
-    private val missmatchDeck = Deck(3, "Try hard", "volonté de nuire",  listOf(), 9)
+    private val deck1 = Deck(1, "Fun", "deck non competitif, pour les copaing", listOf(), 1, 1)
+    private val deck2 = Deck(2, "Try hard", "volonté de nuire", listOf(), 1, 1)
+    private val missmatchDeck = Deck(3, "Try hard", "volonté de nuire",  listOf(), 1,9)
 
 
     @Before
@@ -151,12 +151,12 @@ class DbDaoTest {
     fun daoUpdateDecks_updatesDecksInDB() = runBlocking {
         addTwoUserToDb()
         addTwoDeckToDb()
-        deckDao.update(Deck(1, "fun/serieux", "mode serieux avec les copaings", listOf(), 1))
-        deckDao.update(Deck(2, "Try hard", "volonté de nuire", listOf(), 2))
+        deckDao.update(Deck(1, "fun/serieux", "mode serieux avec les copaings", listOf(), 1,1))
+        deckDao.update(Deck(2, "Try hard", "volonté de nuire", listOf(), 1,2))
 
         val allDecks = deckDao.getAllDecks().first()
-        assertEquals(allDecks[1].toString(), Deck(1, "fun/serieux", "mode serieux avec les copaings", listOf(), 1).toString())
-        assertEquals(allDecks[0].toString(), Deck(2, "Try hard", "volonté de nuire", listOf(), 2).toString())
+        assertEquals(allDecks[1].toString(), Deck(1, "fun/serieux", "mode serieux avec les copaings", listOf(), 1,1).toString())
+        assertEquals(allDecks[0].toString(), Deck(2, "Try hard", "volonté de nuire", listOf(), 1,2).toString())
     }
 
 

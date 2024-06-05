@@ -29,18 +29,25 @@ fun PTCGManagerNavHost(
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateProfileAdd = { navController.navigate(ProfileAddDestination.route) }
+                navigateProfileAdd = { navController.navigate(ProfileAddDestination.route) },
+                navigateToDecksUser = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                }
             )
         }
+
         composable(route = ProfileAddDestination.route) {
            ProfileAddScreen(
                navigateBack = { navController.popBackStack() },
                onNavigateUp = { navController.navigateUp() }
            )
         }
+
         composable(
             route = DecksListDestination.routeWithArgs,
-            arguments = listOf(navArgument(DecksListDestination.routeWithArgs) { type = NavType.IntType })
+            arguments = listOf(navArgument(DecksListDestination.USER_ID_ARG) {
+                type = NavType.IntType
+            })
         ) {
             DecksListScreen()
         }
