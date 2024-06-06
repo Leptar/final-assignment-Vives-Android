@@ -15,43 +15,59 @@ class DeckAddViewModel(
 
     val userId: Int = checkNotNull(savedStateHandle[DecksListDestination.USER_ID_ARG])
 
-    var deckAddUiState by mutableStateOf(DeckAddUiState(deckDetails = DeckDetails(userId = userId)))
+    var deckUiState by mutableStateOf(DeckUiState(deckDetails = DeckDetails(userId = userId)))
         private set
 
     fun updateUiState(deckDetails: DeckDetails) {
-        deckAddUiState =
-            DeckAddUiState(deckDetails = deckDetails, isEntryValid = validateEntry(deckDetails))
+        deckUiState =
+            DeckUiState(deckDetails = deckDetails, isEntryValid = validateEntry(deckDetails))
     }
 
     suspend fun addDeck() {
         if (validateEntry()) {
-            decksRepository.insertDeck(deckAddUiState.deckDetails.toDeck())
+            decksRepository.insertDeck(deckUiState.deckDetails.toDeck())
         }
     }
 
-    private fun validateEntry(uiState: DeckDetails = deckAddUiState.deckDetails): Boolean {
+    private fun validateEntry(uiState: DeckDetails = deckUiState.deckDetails): Boolean {
         return with(uiState) {
             name.isNotBlank() && category < 5 && category > 0 && description.length < 128
         }
     }
 }
 
-data class DeckAddUiState(
+data class DeckUiState(
     val deckDetails: DeckDetails = DeckDetails(),
     val isEntryValid: Boolean = false
 )
 
 data class DeckDetails (
     val id: Int = 0,
-    val name: String = "",
-    val description: String = "",
+    val name: String = "test",
+    val description: String = "test",
     val cardList: List<String> = emptyList(),
-    var category: Int = 0,
-    val userId: Int = 0
+    var category: Int = 1,
+    val userId: Int = 1
 )
 
 fun DeckDetails.toDeck(): Deck =
     Deck(
+        id = id,
+        name = name,
+        description = description,
+        cardList = cardList,
+        category = category,
+        userId = userId
+    )
+
+fun Deck.toDeckUiState(isEntryValid: Boolean): DeckUiState =
+    DeckUiState(
+        deckDetails = this.toDeckDetails(),
+        isEntryValid = isEntryValid
+    )
+
+fun Deck.toDeckDetails(): DeckDetails =
+    DeckDetails(
         id = id,
         name = name,
         description = description,

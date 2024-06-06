@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import be.leocheikhboukal.pokemontcgmanager.PokemonTCGManagerApplication
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.user.ProfileAddViewModel
@@ -49,6 +50,14 @@ object AppViewModelProvider {
             UserDetailsViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 userRepository = PokemonTCGManagerApplication().container.usersRepository
+            )
+        }
+
+        // Initializer for DeckDetailsViewModel
+        initializer {
+            DeckDetailsViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                decksRepository = PokemonTCGManagerApplication().container.decksRepository
             )
         }
     }

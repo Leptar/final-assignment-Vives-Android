@@ -97,7 +97,7 @@ fun DeckAddScreen(
             )
             DeckAddBody(
                 modifier = Modifier,
-                deckAddUiState = viewModel.deckAddUiState,
+                deckUiState = viewModel.deckUiState,
                 onDeckValueChange = viewModel::updateUiState,
                 onSaveClick = {
                     coroutineScope.launch {
@@ -114,7 +114,7 @@ fun DeckAddScreen(
 @Composable
 fun DeckAddBody(
     modifier: Modifier = Modifier,
-    deckAddUiState: DeckAddUiState,
+    deckUiState: DeckUiState,
     onDeckValueChange: (DeckDetails) -> Unit,
     onSaveClick: () -> Unit,
     enabled: Boolean = true,
@@ -142,11 +142,11 @@ fun DeckAddBody(
                 modifier = Modifier.padding(bottom = 5.dp)
             )
 
-            MyDropdownMenu(deckAddUiState = deckAddUiState, onValueChange = onDeckValueChange)
+            MyDropdownMenu(deckUiState = deckUiState, onValueChange = onDeckValueChange)
 
             OutlinedTextField(
-                value = deckAddUiState.deckDetails.name,
-                onValueChange = { onDeckValueChange(deckAddUiState.deckDetails.copy(name = it)) },
+                value = deckUiState.deckDetails.name,
+                onValueChange = { onDeckValueChange(deckUiState.deckDetails.copy(name = it)) },
                 label = { Text("Name*") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,8 +156,8 @@ fun DeckAddBody(
             )
 
             OutlinedTextField(
-                value = deckAddUiState.deckDetails.description,
-                onValueChange = { onDeckValueChange(deckAddUiState.deckDetails.copy(description = it)) },
+                value = deckUiState.deckDetails.description,
+                onValueChange = { onDeckValueChange(deckUiState.deckDetails.copy(description = it)) },
                 label = { Text(text ="Description") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -176,7 +176,7 @@ fun DeckAddBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp, vertical = 20.dp),
-                enabled = deckAddUiState.isEntryValid,
+                enabled = deckUiState.isEntryValid,
                 border = BorderStroke(1.dp, Color.Black),
                 content = { Text("Create") }
             )
@@ -187,11 +187,11 @@ fun DeckAddBody(
 
 @Composable
 fun MyDropdownMenu(
-    deckAddUiState: DeckAddUiState,
+    deckUiState: DeckUiState,
     onValueChange: (DeckDetails) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val text = when(deckAddUiState.deckDetails.category) {
+    val text = when(deckUiState.deckDetails.category) {
         1 -> stringResource(R.string.category_usable)
         2 -> stringResource(R.string.category_need_to_test)
         3 -> stringResource(R.string.category_need_to_change)
@@ -204,7 +204,7 @@ fun MyDropdownMenu(
     Column {
         TextField(
             value = text ,
-            onValueChange = { onValueChange(deckAddUiState.deckDetails.copy(category = it.toInt())) },
+            onValueChange = { onValueChange(deckUiState.deckDetails.copy(category = it.toInt())) },
             label = { Text("Select a category*") },
             readOnly = true,
             trailingIcon = {
@@ -229,7 +229,7 @@ fun MyDropdownMenu(
             DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.category_usable)) },
                 onClick = {
-                    deckAddUiState.deckDetails.category = 1
+                    deckUiState.deckDetails.category = 1
                     expanded = false
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -237,14 +237,14 @@ fun MyDropdownMenu(
             DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.category_need_to_test)) },
                 onClick = {
-                    deckAddUiState.deckDetails.category = 2
+                    deckUiState.deckDetails.category = 2
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.category_need_to_change)) },
                 onClick = {
-                    deckAddUiState.deckDetails.category = 3
+                    deckUiState.deckDetails.category = 3
                     expanded = false
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -252,7 +252,7 @@ fun MyDropdownMenu(
             DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.category_not_finished)) },
                 onClick = {
-                    deckAddUiState.deckDetails.category = 4
+                    deckUiState.deckDetails.category = 4
                     expanded = false
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -267,7 +267,7 @@ fun DeckAddBodyPreview() {
     PokemonTCGManagerTheme {
         DeckAddBody(
             onSaveClick = {},
-            deckAddUiState = DeckAddUiState(),
+            deckUiState = DeckUiState(),
             onDeckValueChange = {}
         )
     }

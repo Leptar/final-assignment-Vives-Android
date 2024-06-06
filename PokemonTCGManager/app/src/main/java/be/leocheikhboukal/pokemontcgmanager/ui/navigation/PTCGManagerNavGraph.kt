@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
@@ -54,7 +56,9 @@ fun PTCGManagerNavHost(
             })
         ) {
             DecksListScreen(
-                navigateToDeck =  {},
+                navigateToDeck =  {
+                    navController.navigate("${DeckDetailsDestination.route}/${it}")
+                },
                 navigateToUser = {
                     navController.navigate("${UserDetailsDestination.route}/${it}")
                 },
@@ -106,6 +110,28 @@ fun PTCGManagerNavHost(
                 navigateToLogin = {
                     navController.navigate(HomeDestination.route)
                 })
+        }
+
+        composable(
+            route = DeckDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(DeckDetailsDestination.DECK_ID_ARG) {
+                type = NavType.IntType
+            })
+        ){
+            DeckDetailsScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() },
+                navigateToCardSearch = { /*TODO*/ },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
+                onAddCardToDeck = { /*TODO*/ },
+                onRemoveCardFromDeck = { /*TODO*/ },
+                onModifyDeck = { /*TODO*/ }
+            )
         }
     }
 }

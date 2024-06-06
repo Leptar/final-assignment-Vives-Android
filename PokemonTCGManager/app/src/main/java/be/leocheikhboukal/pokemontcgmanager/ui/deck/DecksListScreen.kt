@@ -210,6 +210,7 @@ fun DecksCard(
         ),
         modifier = modifier
             .padding(13.dp)
+
     ) {
         Column (
             verticalArrangement = Arrangement.Center,
@@ -226,11 +227,15 @@ fun DecksCard(
                 }
             }
 
-            Image(painter = image, contentDescription = null, modifier = Modifier)
+            Image(
+                painter = image,
+                contentDescription = null,
+                modifier = Modifier
+            )
 
             Text(
-                text = deck.name
-                , fontSize = 12.sp
+                text = deck.name,
+                fontSize = 12.sp
             )
 
         }
