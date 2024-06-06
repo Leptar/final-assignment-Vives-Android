@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.profile
+package be.leocheikhboukal.pokemontcgmanager.ui.deck
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -6,10 +6,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
@@ -35,32 +36,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import be.leocheikhboukal.pokemontcgmanager.PTCGManagerSubAppBar
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
+import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import kotlinx.coroutines.launch
 
-object ProfileAddDestination : NavigationDestination {
-    override val route: String = "profile/add"
+object DeckAddDestination : NavigationDestination {
+    override val route: String = "deck_add"
+    const val USER_ID_ARG = "userId"
+    val routeWithArgs = "$route/{$USER_ID_ARG}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileAddScreen(
+fun DeckAddScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
+    navigateToCardSearch: () -> Unit,
+    navigateToDeck: (Int) -> Unit,
+    navigateToUser: (Int) -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
-    viewModel: ProfileAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DeckAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -74,34 +85,43 @@ fun ProfileAddScreen(
         },
         containerColor = Color(252,61,61),
     ) { innerPadding ->
-        ProfileAddBody(
-            modifier = Modifier,
-            profileUiState = viewModel.profileAddUiState,
-            contentPadding = innerPadding,
-            onProfileValueChange = viewModel::updateUiState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.saveUser()
-                    navigateBack()
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+            PTCGManagerSubAppBar(
+                userId = viewModel.userId,
+                navigateToCardSearch = navigateToCardSearch,
+                navigateToDecksList = navigateToDeck,
+                navigateToProfile = navigateToUser
+            )
+            DeckAddBody(
+                modifier = Modifier,
+                deckAddUiState = viewModel.deckAddUiState,
+                onDeckValueChange = viewModel::updateUiState,
+                onSaveClick = {
+                    coroutineScope.launch {
+                        viewModel.addDeck()
+                        navigateBack()
+                    }
                 }
-            }
-        )
+            )
+        }
+
     }
 }
 
 @Composable
-fun ProfileAddBody(
+fun DeckAddBody(
     modifier: Modifier = Modifier,
-    profileUiState: ProfileAddUiState,
-    onProfileValueChange: (ProfileDetails) -> Unit,
+    deckAddUiState: DeckAddUiState,
+    onDeckValueChange: (DeckDetails) -> Unit,
     onSaveClick: () -> Unit,
     enabled: Boolean = true,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     Box(
-        modifier = Modifier
-            .padding(contentPadding)
-            .padding(horizontal = 68.dp, vertical = 150.dp),
+        modifier = modifier
+            .padding(68.dp),
     ) {
         Column(
             modifier = Modifier
@@ -116,24 +136,35 @@ fun ProfileAddBody(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Add Profile",
+                text = "Add new deck",
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier.padding(bottom = 5.dp)
             )
 
-            MyDropdownMenu(profileUiState = profileUiState)
+            MyDropdownMenu(deckAddUiState = deckAddUiState, onValueChange = onDeckValueChange)
 
             OutlinedTextField(
-                value = profileUiState.profileDetails.name,
-                onValueChange = { onProfileValueChange(profileUiState.profileDetails.copy(name = it)) },
+                value = deckAddUiState.deckDetails.name,
+                onValueChange = { onDeckValueChange(deckAddUiState.deckDetails.copy(name = it)) },
                 label = { Text("Name*") },
                 modifier = Modifier
                     .fillMaxWidth()
-
                     .padding(16.dp),
                 enabled = enabled,
                 singleLine = true,
+            )
+
+            OutlinedTextField(
+                value = deckAddUiState.deckDetails.description,
+                onValueChange = { onDeckValueChange(deckAddUiState.deckDetails.copy(description = it)) },
+                label = { Text(text ="Description") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                enabled = enabled,
+                maxLines = 4,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
 
             Button(
@@ -145,9 +176,9 @@ fun ProfileAddBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp, vertical = 20.dp),
-                enabled = profileUiState.isEntryValid,
+                enabled = deckAddUiState.isEntryValid,
                 border = BorderStroke(1.dp, Color.Black),
-                content = { Text("Create Profile") }
+                content = { Text("Create") }
             )
         }
     }
@@ -156,15 +187,15 @@ fun ProfileAddBody(
 
 @Composable
 fun MyDropdownMenu(
-    profileUiState: ProfileAddUiState,
-    onValueChange: (ProfileDetails) -> Unit = {}
+    deckAddUiState: DeckAddUiState,
+    onValueChange: (DeckDetails) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val text = when(profileUiState.profileDetails.color) {
-        1 -> "Red"
-        2 -> "Blue"
-        3 -> "Yellow"
-        4 -> "Purple"
+    val text = when(deckAddUiState.deckDetails.category) {
+        1 -> stringResource(R.string.category_usable)
+        2 -> stringResource(R.string.category_need_to_test)
+        3 -> stringResource(R.string.category_need_to_change)
+        4 -> stringResource(R.string.category_not_finished)
         else -> {
             ""
         }
@@ -173,9 +204,9 @@ fun MyDropdownMenu(
     Column {
         TextField(
             value = text ,
-            onValueChange = { onValueChange(profileUiState.profileDetails.copy(color = it.toInt())) },
-            label = { Text("Select a color*") },
-            readOnly = false,
+            onValueChange = { onValueChange(deckAddUiState.deckDetails.copy(category = it.toInt())) },
+            label = { Text("Select a category*") },
+            readOnly = true,
             trailingIcon = {
                 IconButton(
                     onClick = { expanded = !expanded }
@@ -186,82 +217,58 @@ fun MyDropdownMenu(
                     )
                 }
             },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            keyboardActions = KeyboardActions(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         )
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Red") },
+                text = { Text(text = stringResource(R.string.category_usable)) },
                 onClick = {
-                    profileUiState.profileDetails.color = 1
+                    deckAddUiState.deckDetails.category = 1
+                    expanded = false
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            DropdownMenuItem(
+                text = { Text(text = stringResource(R.string.category_need_to_test)) },
+                onClick = {
+                    deckAddUiState.deckDetails.category = 2
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Blue") },
+                text = { Text(text = stringResource(R.string.category_need_to_change)) },
                 onClick = {
-                    profileUiState.profileDetails.color = 2
+                    deckAddUiState.deckDetails.category = 3
                     expanded = false
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
             DropdownMenuItem(
-                text = { Text("Yellow") },
+                text = { Text(text = stringResource(R.string.category_not_finished)) },
                 onClick = {
-                    profileUiState.profileDetails.color = 3
+                    deckAddUiState.deckDetails.category = 4
                     expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Purple") },
-                onClick = {
-                    profileUiState.profileDetails.color = 4
-                    expanded = false
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ProfileScreenPreview() {
+fun DeckAddBodyPreview() {
     PokemonTCGManagerTheme {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        Scaffold(
-            topBar = {
-                PTCGManagerTitleAppBar(
-                    scrollBehavior = scrollBehavior,
-                    canNavigateBack = true,
-                    navigateUp = {}
-                )
-            },
-            content = { innerPadding ->
-                ProfileAddBody(
-                    contentPadding = innerPadding,
-                    onSaveClick = {},
-                    profileUiState = ProfileAddUiState(),
-                    onProfileValueChange = {}
-                )
-            },
-            containerColor = Color(252,61,61),
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-
-            )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileAddBodyPreview() {
-    PokemonTCGManagerTheme {
-        ProfileAddBody(
+        DeckAddBody(
             onSaveClick = {},
-            profileUiState = ProfileAddUiState(),
-            onProfileValueChange = {}
+            deckAddUiState = DeckAddUiState(),
+            onDeckValueChange = {}
         )
     }
 }

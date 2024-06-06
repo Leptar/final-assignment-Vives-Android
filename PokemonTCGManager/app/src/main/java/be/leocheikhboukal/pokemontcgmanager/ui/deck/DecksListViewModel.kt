@@ -18,7 +18,7 @@ class DecksListViewModel(
 ) : ViewModel() {
     private val userId: Int = checkNotNull(savedStateHandle[DecksListDestination.USER_ID_ARG])
 
-    val stateFlowUiState: StateFlow<UserWithDecksUiState> =
+    var stateFlowUiState: StateFlow<UserWithDecksUiState> =
         usersRepository.getUserAndDecksStream(userId)
             .filterNotNull()
             .map{
@@ -28,6 +28,7 @@ class DecksListViewModel(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = UserWithDecksUiState()
             )
+
 
 }
 

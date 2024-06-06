@@ -11,7 +11,7 @@ import be.leocheikhboukal.pokemontcgmanager.data.user.User
 import be.leocheikhboukal.pokemontcgmanager.data.user.UserDao
 
 @TypeConverters(Converters::class)
-@Database(entities = [User::class, Deck::class], version = 2)
+@Database(entities = [User::class, Deck::class], version = 3)
 abstract class PTCGManagerDb : RoomDatabase() {
 
     abstract fun userDao(): UserDao

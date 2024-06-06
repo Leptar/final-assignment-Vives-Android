@@ -8,7 +8,7 @@ data class UserWithDecks(
     @Embedded val user: User,
     @Relation(
         parentColumn = "id",
-        entityColumn = "id"
+        entityColumn = "userId"
     )
-    val decks: List<Deck>
+    var decks: List<Deck>
 )

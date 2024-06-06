@@ -59,14 +59,15 @@ fun DecksListScreen(
     modifier: Modifier = Modifier,
     onNavigateUp: () -> Unit = {},
     canNavigateBack: Boolean = false,
-    navigateToDeck: (Int) -> Unit = {},
-    navigateToDeckCreate: (Int) -> Unit = {},
-    navigateToCardSearch: () -> Unit = {},
-    navigateToUser: (Int) -> Unit = {},
+    navigateToDeck: (Int) -> Unit,
+    navigateToDeckCreate: (Int) -> Unit,
+    navigateToCardSearch: () -> Unit,
+    navigateToUser: (Int) -> Unit,
     viewModel: DecksListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val uiState = viewModel.stateFlowUiState.collectAsState()
+
 
     Scaffold(
         modifier = modifier

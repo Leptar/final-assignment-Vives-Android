@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PokemonTCGManager</string>
+    <string name="category_usable">Usable</string>
+    <string name="category_need_to_test">Need to test</string>
+    <string name="category_need_to_change">Need to change</string>
+    <string name="category_not_finished">Not finished</string>
 </resources>
