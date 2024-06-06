@@ -11,6 +11,8 @@ import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckModifyDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckModifyScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
@@ -130,8 +132,32 @@ fun PTCGManagerNavHost(
                 },
                 onAddCardToDeck = { /*TODO*/ },
                 onRemoveCardFromDeck = { /*TODO*/ },
-                onModifyDeck = { /*TODO*/ }
+                onModifyDeck = {
+                    navController.navigate("${DeckModifyDestination.route}/${it}")
+                }
             )
+        }
+
+        composable(
+            route = DeckModifyDestination.routeWithArgs,
+            arguments = listOf(navArgument(DeckModifyDestination.DECK_ID_ARG) {
+                type = NavType.IntType
+            })
+        ) {
+            DeckModifyScreen(
+                navigateToDeckDetails = {
+                    navController.navigate("${DeckDetailsDestination.route}/${it}")
+                },
+                onNavigateUp = { navController.navigateUp() },
+                navigateToCardSearch = { /*TODO*/ },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                }
+
+        )
         }
     }
 }
