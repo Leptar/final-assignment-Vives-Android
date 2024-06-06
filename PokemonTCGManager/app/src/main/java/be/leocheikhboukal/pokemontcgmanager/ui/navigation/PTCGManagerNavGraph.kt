@@ -13,8 +13,10 @@ import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.user.ProfileAddDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.user.ProfileAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.user.UserAddDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.user.UserAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsScreen
 
 /**
  * Navigation graph for the application
@@ -31,15 +33,15 @@ fun PTCGManagerNavHost(
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateProfileAdd = { navController.navigate(ProfileAddDestination.route) },
+                navigateProfileAdd = { navController.navigate(UserAddDestination.route) },
                 navigateToDecksUser = {
                     navController.navigate("${DecksListDestination.route}/${it}")
                 }
             )
         }
 
-        composable(route = ProfileAddDestination.route) {
-           ProfileAddScreen(
+        composable(route = UserAddDestination.route) {
+           UserAddScreen(
                navigateBack = { navController.popBackStack() },
                onNavigateUp = { navController.navigateUp() }
            )
@@ -53,7 +55,9 @@ fun PTCGManagerNavHost(
         ) {
             DecksListScreen(
                 navigateToDeck =  {},
-                navigateToUser = {},
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
                 navigateToCardSearch = {},
                 navigateToDeckCreate = {
                     navController.navigate("${DeckAddDestination.route}/${it}")
@@ -75,10 +79,33 @@ fun PTCGManagerNavHost(
                 navigateToDeck = {
                     navController.navigate("${DecksListDestination.route}/${it}")
                 },
-                navigateToUser = {},
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
                 navigateToCardSearch = {}
 
             )
+        }
+        
+        composable(
+            route = UserDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(UserDetailsDestination.USER_ID_ARG) {
+                type = NavType.IntType
+            })
+        ) {
+            UserDetailsScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() },
+                navigateToCardSearch = { /*TODO*/ },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                } ,
+                navigateToLogin = {
+                    navController.navigate(HomeDestination.route)
+                })
         }
     }
 }

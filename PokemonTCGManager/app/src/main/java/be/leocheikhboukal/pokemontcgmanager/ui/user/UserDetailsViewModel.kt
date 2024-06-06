@@ -29,5 +29,29 @@ class UserDetailsViewModel(
                .toUserUiState(true)
        }
     }
+
+    /**
+     * Updates the [UserUiState] with the value provided in the argument. This method also triggers
+     * a validation for input values.
+     */
+    fun updateUiState(userDetails: UserDetails) {
+        userUiState =
+            UserUiState(userDetails = userDetails, isEntryValid = validateInput(userDetails))
+    }
+
+    /**
+     * Update the user in the [UserRepository]'s data source
+     */
+    suspend fun updateUser() {
+        if (validateInput()) {
+            userRepository.updateUser(userUiState.userDetails.toUser())
+        }
+    }
+
+    private fun validateInput(uiState: UserDetails = userUiState.userDetails): Boolean {
+        return with(uiState) {
+            name.isNotBlank() && name.length <= 9 && color > 0 && color < 5
+        }
+    }
 }
 

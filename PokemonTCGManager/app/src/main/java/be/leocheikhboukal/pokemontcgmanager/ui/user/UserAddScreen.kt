@@ -46,13 +46,13 @@ import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import kotlinx.coroutines.launch
 
-object ProfileAddDestination : NavigationDestination {
-    override val route: String = "profile/add"
+object UserAddDestination : NavigationDestination {
+    override val route: String = "User/add"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileAddScreen(
+fun UserAddScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -74,11 +74,11 @@ fun ProfileAddScreen(
         },
         containerColor = Color(252,61,61),
     ) { innerPadding ->
-        ProfileAddBody(
+        UserAddBody(
             modifier = Modifier,
-            profileUiState = viewModel.userUiState,
+            userUiState = viewModel.userUiState,
             contentPadding = innerPadding,
-            onProfileValueChange = viewModel::updateUiState,
+            onUserValueChange = viewModel::updateUiState,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
@@ -90,16 +90,16 @@ fun ProfileAddScreen(
 }
 
 @Composable
-fun ProfileAddBody(
+fun UserAddBody(
     modifier: Modifier = Modifier,
-    profileUiState: UserUiState,
-    onProfileValueChange: (UserDetails) -> Unit,
+    userUiState: UserUiState,
+    onUserValueChange: (UserDetails) -> Unit,
     onSaveClick: () -> Unit,
     enabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(contentPadding)
             .padding(horizontal = 68.dp, vertical = 150.dp),
     ) {
@@ -122,11 +122,11 @@ fun ProfileAddBody(
                 modifier = Modifier.padding(bottom = 5.dp)
             )
 
-            MyDropdownMenu(profileUiState = profileUiState)
+            MyDropdownMenu(userUiState = userUiState)
 
             OutlinedTextField(
-                value = profileUiState.userDetails.name,
-                onValueChange = { onProfileValueChange(profileUiState.userDetails.copy(name = it)) },
+                value = userUiState.userDetails.name,
+                onValueChange = { onUserValueChange(userUiState.userDetails.copy(name = it)) },
                 label = { Text("Name*") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,7 +145,7 @@ fun ProfileAddBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp, vertical = 20.dp),
-                enabled = profileUiState.isEntryValid,
+                enabled = userUiState.isEntryValid,
                 border = BorderStroke(1.dp, Color.Black),
                 content = { Text("Create Profile") }
             )
@@ -156,11 +156,11 @@ fun ProfileAddBody(
 
 @Composable
 fun MyDropdownMenu(
-    profileUiState: UserUiState,
+    userUiState: UserUiState,
     onValueChange: (UserDetails) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val text = when(profileUiState.userDetails.color) {
+    val text = when(userUiState.userDetails.color) {
         1 -> "Red"
         2 -> "Blue"
         3 -> "Yellow"
@@ -173,7 +173,7 @@ fun MyDropdownMenu(
     Column {
         TextField(
             value = text ,
-            onValueChange = { onValueChange(profileUiState.userDetails.copy(color = it.toInt())) },
+            onValueChange = { onValueChange(userUiState.userDetails.copy(color = it.toInt())) },
             label = { Text("Select a color*") },
             readOnly = false,
             trailingIcon = {
@@ -195,28 +195,28 @@ fun MyDropdownMenu(
             DropdownMenuItem(
                 text = { Text("Red") },
                 onClick = {
-                    profileUiState.userDetails.color = 1
+                    userUiState.userDetails.color = 1
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text("Blue") },
                 onClick = {
-                    profileUiState.userDetails.color = 2
+                    userUiState.userDetails.color = 2
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text("Yellow") },
                 onClick = {
-                    profileUiState.userDetails.color = 3
+                    userUiState.userDetails.color = 3
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text("Purple") },
                 onClick = {
-                    profileUiState.userDetails.color = 4
+                    userUiState.userDetails.color = 4
                     expanded = false
                 }
             )
@@ -239,11 +239,11 @@ fun ProfileScreenPreview() {
                 )
             },
             content = { innerPadding ->
-                ProfileAddBody(
+                UserAddBody(
                     contentPadding = innerPadding,
                     onSaveClick = {},
-                    profileUiState = UserUiState(),
-                    onProfileValueChange = {}
+                    userUiState = UserUiState(),
+                    onUserValueChange = {}
                 )
             },
             containerColor = Color(252,61,61),
@@ -258,10 +258,10 @@ fun ProfileScreenPreview() {
 @Composable
 fun ProfileAddBodyPreview() {
     PokemonTCGManagerTheme {
-        ProfileAddBody(
+        UserAddBody(
             onSaveClick = {},
-            profileUiState = UserUiState(),
-            onProfileValueChange = {}
+            userUiState = UserUiState(),
+            onUserValueChange = {}
         )
     }
 }

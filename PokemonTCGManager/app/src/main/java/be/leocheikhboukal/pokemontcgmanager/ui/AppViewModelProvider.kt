@@ -11,6 +11,7 @@ import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.user.ProfileAddViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
@@ -40,6 +41,14 @@ object AppViewModelProvider {
             DeckAddViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 decksRepository = PokemonTCGManagerApplication().container.decksRepository
+            )
+        }
+
+        // Initializer for UserDetailsViewModel
+        initializer {
+            UserDetailsViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                userRepository = PokemonTCGManagerApplication().container.usersRepository
             )
         }
     }
