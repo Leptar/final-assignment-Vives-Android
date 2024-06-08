@@ -2,6 +2,7 @@ package be.leocheikhboukal.pokemontcgmanager.data
 
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 data class Card(
     val id: String,
@@ -66,4 +67,6 @@ interface TcgdexApi {
     @GET("cards/{id}")
     suspend fun getCardDetails(@Path("id")id: String): Card
 
+    @GET("cards?name=name")
+    suspend fun getCardsByName(@Query("name")name: String): List<CardBrief>
 }

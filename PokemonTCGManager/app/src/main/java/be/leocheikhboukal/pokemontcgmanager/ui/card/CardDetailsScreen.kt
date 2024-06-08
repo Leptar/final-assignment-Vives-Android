@@ -230,7 +230,7 @@ fun CardDetailsBody(
                     Text(
                         text = description,
                         color = Color.Black,
-                        modifier = Modifier.padding(5.dp),
+                        modifier = Modifier.padding(5.dp).fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
                 }

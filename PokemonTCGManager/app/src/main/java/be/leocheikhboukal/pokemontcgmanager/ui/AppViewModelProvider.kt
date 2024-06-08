@@ -76,7 +76,6 @@ object AppViewModelProvider {
         initializer {
             CardsListViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
-                usersRepository = PokemonTCGManagerApplication().container.usersRepository
             )
         }
 

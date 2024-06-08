@@ -28,6 +28,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,11 +46,13 @@ import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import coil.compose.AsyncImage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object CardsListDestination : NavigationDestination {
     override val route = "cards_list"
     const val USER_ID_ARG = "userId"
-    val routeWithArgs = "${CardsListDestination.route}/{$USER_ID_ARG}"
+    val routeWithArgs = "$route/{$USER_ID_ARG}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +68,7 @@ fun CardsListScreen(
     viewModel: CardsListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
+//    val uiState = viewModel.cardUiState.collectAsState()
 
     Scaffold(
         modifier = modifier
@@ -91,9 +95,11 @@ fun CardsListScreen(
             )
 
             CardsListBody(
+                onValueChange = viewModel::updateNameSearch,
                 userId = viewModel.userId,
-                listCards = viewModel.cardsLiveData.value,
-                navigateToCardDetail = navigateToCardDetail
+                uiState = viewModel.cardUiState,
+                navigateToCardDetail = navigateToCardDetail,
+                onClickSearch = viewModel::updateCards
             )
         }
 
@@ -104,9 +110,13 @@ fun CardsListScreen(
 @Composable
 fun CardsListBody(
     userId: Int,
-    listCards: List<CardBrief>?,
-    navigateToCardDetail: (String,Int) -> Unit
+    uiState: StateFlow<CardUiState>,
+    navigateToCardDetail: (String, Int) -> Unit,
+    onValueChange: (String) -> Unit,
+    onClickSearch: () -> Unit
 ){
+    val currentUiState by uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -120,22 +130,23 @@ fun CardsListBody(
             .fillMaxSize(),
     ){
         Row(
-            modifier = Modifier.weight(0.09f),
+            modifier = Modifier.weight(0.15f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ){
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = currentUiState.nameSearch,
+                onValueChange = { onValueChange(it) },
                 label = { Text("search") },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(5.dp)
                     .weight(1f),
                 singleLine = true,
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { onClickSearch() },
                 content = {
                     Icon(
                         imageVector = Icons.Filled.Search,
@@ -169,25 +180,14 @@ fun CardsListBody(
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Top
         ) {
-            val cardsWithImages = listCards?.filter { it.image != null }
+            val cardsWithImages = currentUiState.cards.filter { it.image != null }
 
-            if (cardsWithImages != null) {
-                items(cardsWithImages) { card ->
-                    CardItem(
-                        userId = userId,
-                        card = card,
-                        onClickCard = navigateToCardDetail
-                    )
-                }
-            } else {
-                item{
-                    Text(
-                        text = "No cards found",
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .fillMaxSize(),
-                    )
-                }
+            items(cardsWithImages) { card ->
+                CardItem(
+                    userId = userId,
+                    card = card,
+                    onClickCard = navigateToCardDetail
+                )
             }
         }
     }
@@ -230,9 +230,11 @@ fun CardItem(
 fun CardsListBodyPreview() {
     PokemonTCGManagerTheme {
         CardsListBody(
-            listCards = null,
+            userId = 1,
+            uiState = MutableStateFlow(CardUiState()),
             navigateToCardDetail = {_, _ ->},
-            userId = 1
+            onValueChange = {},
+            onClickSearch = {}
         )
     }
 }
