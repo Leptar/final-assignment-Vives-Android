@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -47,9 +50,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerSubAppBar
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
 import be.leocheikhboukal.pokemontcgmanager.R
+import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
+import coil.compose.AsyncImage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 object DeckDetailsDestination: NavigationDestination {
@@ -64,9 +71,10 @@ fun DeckDetailsScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     navigateToCardSearch: (Int) -> Unit,
+    navigateToCardDetail: (String, Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
-    onAddCardToDeck: () -> Unit,
+    onAddCardToDeck: (Int, Int) -> Unit,
     onRemoveCardFromDeck: () -> Unit,
     onModifyDeck: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -100,6 +108,7 @@ fun DeckDetailsScreen(
                 navigateToProfile = navigateToUser
             )
             DeckDetailsBody(
+                cards = viewModel.cards,
                 deckUiState = viewModel.deckUiState,
                 onAddCardToDeck = onAddCardToDeck,
                 onRemoveCardFromDeck = onRemoveCardFromDeck,
@@ -109,8 +118,8 @@ fun DeckDetailsScreen(
                         viewModel.deleteDeck()
                         navigateBack()
                     }
-
                 },
+                navigateToCardDetail = navigateToCardDetail
             )
         }
 
@@ -121,10 +130,12 @@ fun DeckDetailsScreen(
 fun DeckDetailsBody(
     modifier: Modifier = Modifier,
     deckUiState: DeckUiState,
-    onAddCardToDeck: () -> Unit,
+    onAddCardToDeck: (Int, Int) -> Unit,
     onRemoveCardFromDeck: () -> Unit,
     onModifyDeck: (Int) -> Unit,
-    onRemoveDeck: () -> Unit
+    onRemoveDeck: () -> Unit,
+    navigateToCardDetail: (String, Int) -> Unit,
+    cards: StateFlow<List<Card>>,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -220,7 +231,7 @@ fun DeckDetailsBody(
                     verticalArrangement = Arrangement.Top
                 ) {
                     LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
+                        columns = GridCells.Fixed(3),
                         horizontalArrangement = Arrangement.Center,
                         verticalArrangement = Arrangement.Center,
                         modifier = Modifier
@@ -228,7 +239,15 @@ fun DeckDetailsBody(
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-
+                        val cardWithImage = cards.value.filter { it.image != null }
+                        items(cardWithImage) { card ->
+                            CardItem(
+                                image = card.image,
+                                userId = deckUiState.deckDetails.userId,
+                                cardId = card.id,
+                                onClickCard = navigateToCardDetail
+                            )
+                        }
                     }
 
                     Box(
@@ -244,7 +263,12 @@ fun DeckDetailsBody(
                             .fillMaxWidth()
                     ){
                         Button(
-                            onClick = onAddCardToDeck ,
+                            onClick = {
+                                onAddCardToDeck(
+                                    deckUiState.deckDetails.id,
+                                    deckUiState.deckDetails.userId
+                                )
+                            },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(117,255,114),
                                 contentColor = Color.Black
@@ -315,6 +339,35 @@ fun DeckDetailsBody(
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CardItem(
+    image: String?,
+    cardId: String,
+    userId: Int,
+    onClickCard: (String, Int) -> Unit
+) {
+    Card (
+        onClick = { onClickCard(cardId, userId) },
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
+        shape = RoundedCornerShape(0.dp),
+        modifier = Modifier
+            .padding(10.dp)
+
+    ) {
+
+        AsyncImage (
+            model = "${image}/high.png",
+            placeholder = painterResource(id = R.drawable.loading_img),
+            error = painterResource(id = R.drawable.ic_broken_image),
+            contentDescription = null
+        )
+
     }
 }
 
@@ -415,15 +468,18 @@ private fun FirstRow(deckUiState: DeckUiState) {
 @Preview
 @Composable
 fun DeckDetailsBodyPreview() {
+    val cards: MutableStateFlow<List<Card>> = MutableStateFlow(emptyList())
     PokemonTCGManagerTheme {
         DeckDetailsBody(
             deckUiState = DeckUiState(
                 deckDetails = DeckDetails(description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet lectus tempor, tincidunt quam sed, sagittis non.")
             ),
-            onAddCardToDeck = { /*TODO*/ },
-            onRemoveCardFromDeck = { /*TODO*/ },
-            onModifyDeck = { /*TODO*/ },
-            onRemoveDeck = { /*TODO*/ }
+            onAddCardToDeck = { _ , _ -> },
+            onRemoveCardFromDeck = { },
+            onModifyDeck = { },
+            onRemoveDeck = { },
+            navigateToCardDetail = { _,_ -> },
+            cards = cards
         )
     }
 }

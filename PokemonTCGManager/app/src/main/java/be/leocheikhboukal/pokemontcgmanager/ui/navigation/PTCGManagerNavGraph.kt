@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardAddDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardAddScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardsListDestination
@@ -131,19 +133,24 @@ fun PTCGManagerNavHost(
             })
         ){
             DeckDetailsScreen(
-                navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
                 navigateToCardSearch = { navController.navigate("${CardsListDestination.route}/${it}") },
                 navigateToDeck = {
                     navController.navigate("${DecksListDestination.route}/${it}")
                 },
+                navigateBack = { navController.popBackStack() },
                 navigateToUser = {
                     navController.navigate("${UserDetailsDestination.route}/${it}")
                 },
-                onAddCardToDeck = { /*TODO*/ },
+                onAddCardToDeck = { deckId: Int, userId: Int, ->
+                    navController.navigate("${CardAddDestination.route}/${userId}/${deckId}")
+                },
                 onRemoveCardFromDeck = { /*TODO*/ },
                 onModifyDeck = {
                     navController.navigate("${DeckModifyDestination.route}/${it}")
+                },
+                navigateToCardDetail = { cardId: String, userId: Int, ->
+                    navController.navigate("${CardDetailsDestination.route}/${userId}/${cardId}")
                 }
             )
         }
@@ -209,6 +216,35 @@ fun PTCGManagerNavHost(
             CardDetailsScreen(
                 canNavigateBack = true,
                 onNavigateUp = { navController.navigateUp() },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
+                navigateToCardSearch = {
+                    navController.navigate("${CardsListDestination.route}/${it}")
+                }
+            )
+        }
+
+        composable(
+            route = CardAddDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(CardAddDestination.DECK_ID_ARG) {
+                    type = NavType.IntType
+                },
+                navArgument(CardAddDestination.USER_ID_ARG) {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            CardAddScreen(
+                canNavigateBack = true,
+                onNavigateUp = { navController.navigateUp() },
+                navigateToDeckDetails = {
+                    navController.navigate("${DeckDetailsDestination.route}/${it}")
+                },
                 navigateToDeck = {
                     navController.navigate("${DecksListDestination.route}/${it}")
                 },

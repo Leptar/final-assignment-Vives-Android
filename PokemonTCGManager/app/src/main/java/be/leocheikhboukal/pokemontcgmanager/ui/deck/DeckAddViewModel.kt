@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
 import be.leocheikhboukal.pokemontcgmanager.data.deck.DecksRepository
 
@@ -38,7 +39,8 @@ class DeckAddViewModel(
 
 data class DeckUiState(
     val deckDetails: DeckDetails = DeckDetails(),
-    val isEntryValid: Boolean = false
+    val isEntryValid: Boolean = false,
+    var cards: List<Card> = emptyList()
 )
 
 data class DeckDetails (
