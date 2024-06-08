@@ -61,7 +61,7 @@ fun DecksListScreen(
     canNavigateBack: Boolean = false,
     navigateToDeck: (Int) -> Unit,
     navigateToDeckCreate: (Int) -> Unit,
-    navigateToCardSearch: () -> Unit,
+    navigateToCardSearch: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     viewModel: DecksListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {

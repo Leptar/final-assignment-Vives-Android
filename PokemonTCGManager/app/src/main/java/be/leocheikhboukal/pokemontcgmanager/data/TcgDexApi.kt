@@ -6,6 +6,7 @@ data class ApiResponseforListCards(
     val content: List<CardBrief>
 )
 
+
 data class CardBrief(
     val id: String,
     val localId: String,
@@ -16,6 +17,6 @@ data class CardBrief(
 interface TcgdexApi {
 
     @GET("cards")
-    suspend fun getCards(): ApiResponseforListCards
+    suspend fun getCards(): List<CardBrief>
 
 }

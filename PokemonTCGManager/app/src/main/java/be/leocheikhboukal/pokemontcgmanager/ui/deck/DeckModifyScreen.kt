@@ -48,7 +48,7 @@ object DeckModifyDestination: NavigationDestination {
 fun DeckModifyScreen(
     navigateToDeckDetails: (Int) -> Unit,
     onNavigateUp: () -> Unit,
-    navigateToCardSearch: () -> Unit,
+    navigateToCardSearch: (Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     modifier: Modifier = Modifier,

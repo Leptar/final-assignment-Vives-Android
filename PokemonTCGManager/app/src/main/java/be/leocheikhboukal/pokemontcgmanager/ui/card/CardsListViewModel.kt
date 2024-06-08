@@ -9,6 +9,7 @@ import be.leocheikhboukal.pokemontcgmanager.data.TcgdexApi
 import be.leocheikhboukal.pokemontcgmanager.data.user.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class CardsListViewModel(
     savedStateHandle: SavedStateHandle,
@@ -20,6 +21,7 @@ class CardsListViewModel(
     val apiTcgdex: Retrofit = Retrofit
         .Builder()
         .baseUrl("https://api.tcgdex.net/v2/en/")
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
 //    val assetsTcgdex: Retrofit = Retrofit
@@ -31,11 +33,19 @@ class CardsListViewModel(
 
     val cardsLiveData = MutableLiveData<List<CardBrief>>()
 
+    init {
+        getCards()
+    }
     fun getCards() {
         viewModelScope.launch{
-            val response = tcgdexApi.getCards()
-            val cards: List<CardBrief> = response.content
-            cardsLiveData.postValue(cards)
+            try {
+                val response = tcgdexApi.getCards()
+                val cards: List<CardBrief> = response
+                cardsLiveData.postValue(cards)
+
+            } catch (e: Exception) {
+                // Handle network error
+            }
         }
     }
 }

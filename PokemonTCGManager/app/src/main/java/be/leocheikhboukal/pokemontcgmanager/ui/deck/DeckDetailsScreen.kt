@@ -63,7 +63,7 @@ object DeckDetailsDestination: NavigationDestination {
 fun DeckDetailsScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    navigateToCardSearch: () -> Unit,
+    navigateToCardSearch: (Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     onAddCardToDeck: () -> Unit,

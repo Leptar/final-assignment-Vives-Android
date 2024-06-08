@@ -47,7 +47,7 @@ fun UserDetailsScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToCardSearch: () -> Unit,
+    navigateToCardSearch: (Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     navigateToLogin: () -> Unit,

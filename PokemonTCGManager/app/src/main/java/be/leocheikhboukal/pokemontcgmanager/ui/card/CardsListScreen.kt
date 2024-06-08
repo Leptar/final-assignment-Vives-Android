@@ -1,6 +1,5 @@
 package be.leocheikhboukal.pokemontcgmanager.ui.card
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,16 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerSubAppBar
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
+import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.CardBrief
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 
 object CardsListDestination : NavigationDestination {
     override val route = "cards_list"
@@ -54,10 +55,11 @@ object CardsListDestination : NavigationDestination {
 @Composable
 fun CardsListScreen(
     modifier: Modifier = Modifier,
-    navigateToCardSearch: () -> Unit,
+    navigateToCardSearch: (Int) -> Unit,
+    navigateToCardDetail: (String) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
-    canNavigateBack: Boolean,
+    canNavigateBack: Boolean = true,
     onNavigateUp: () -> Unit,
     viewModel: CardsListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -90,6 +92,7 @@ fun CardsListScreen(
 
             CardsListBody(
                 listCards = viewModel.cardsLiveData.value,
+                navigateToCardDetail = navigateToCardDetail
             )
         }
 
@@ -99,11 +102,12 @@ fun CardsListScreen(
 
 @Composable
 fun CardsListBody(
-    listCards: List<CardBrief>?
+    listCards: List<CardBrief>?,
+    navigateToCardDetail: (String) -> Unit
 ){
     Column(
         modifier = Modifier
-            .background(Color(252, 61, 61))
+            .padding(10.dp)
             .background(Color(252, 61, 61))
             .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
             .background(
@@ -159,21 +163,28 @@ fun CardsListBody(
             modifier = Modifier
                 .weight(1f)
                 .padding(2.dp),
-            columns = GridCells.Fixed(4),
+            columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Top
         ) {
-            if (listCards != null) {
-                items(listCards) { card ->
-                    if (card.name != "Unown"){
-                        CardItem(
-                            card = card,
-                            onClickCard = {}
-                        )
-                    }
+            val cardsWithImages = listCards?.filter { it.image != null }
+
+            if (cardsWithImages != null) {
+                items(cardsWithImages) { card ->
+                    CardItem(
+                        card = card,
+                        onClickCard = navigateToCardDetail
+                    )
                 }
             } else {
-                /* TODO */
+                item{
+                    Text(
+                        text = "No cards found",
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .fillMaxSize(),
+                    )
+                }
             }
         }
     }
@@ -194,19 +205,16 @@ fun CardItem(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
+        shape = RoundedCornerShape(0.dp),
         modifier = Modifier
             .padding(10.dp)
 
     ) {
-        val painter = rememberImagePainter(
-            data = "${card.image}/high.png",
-            builder = {
-                crossfade(true)
-            }
-        )
 
-        Image (
-            painter = painter,
+        AsyncImage (
+            model = "${card.image}/high.png",
+            placeholder = painterResource(id = R.drawable.yellow),
+            error = painterResource(id = R.drawable.red),
             contentDescription = null
         )
 
@@ -218,7 +226,8 @@ fun CardItem(
 fun CardsListBodyPreview() {
     PokemonTCGManagerTheme {
         CardsListBody(
-            listCards = null
+            listCards = null,
+            navigateToCardDetail = {}
         )
     }
 }

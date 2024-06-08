@@ -102,7 +102,7 @@ fun PTCGManagerTitleAppBar(
 fun PTCGManagerSubAppBar(
     modifier: Modifier = Modifier,
     userId: Int,
-    navigateToCardSearch: () -> Unit = {},
+    navigateToCardSearch: (Int) -> Unit = {},
     navigateToDecksList: (Int) -> Unit = {},
     navigateToProfile: (Int) -> Unit = {},
 ) {
@@ -113,7 +113,7 @@ fun PTCGManagerSubAppBar(
         verticalAlignment = Alignment.Top
     ) {
         Button(
-            onClick = navigateToCardSearch,
+            onClick = {navigateToCardSearch(userId)},
             shape = RectangleShape,
             border = BorderStroke(1.dp, Color.White),
             colors = ButtonDefaults.buttonColors(
