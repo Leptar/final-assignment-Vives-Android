@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardsListDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardsListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddDestination
@@ -187,6 +189,35 @@ fun PTCGManagerNavHost(
                 },
                 canNavigateBack = true,
                 onNavigateUp = { navController.navigateUp() },
+                navigateToCardDetail = { cardId: String, userId: Int, ->
+                    navController.navigate("${CardDetailsDestination.route}/${userId}/${cardId}")
+                }
+            )
+        }
+
+        composable(
+            route = CardDetailsDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(CardDetailsDestination.USER_ID_ARG) {
+                    type = NavType.IntType
+                },
+                navArgument(CardDetailsDestination.CARD_ID_ARG) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            CardDetailsScreen(
+                canNavigateBack = true,
+                onNavigateUp = { navController.navigateUp() },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
+                navigateToCardSearch = {
+                    navController.navigate("${CardsListDestination.route}/${it}")
+                }
             )
         }
 

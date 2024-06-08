@@ -56,7 +56,7 @@ object CardsListDestination : NavigationDestination {
 fun CardsListScreen(
     modifier: Modifier = Modifier,
     navigateToCardSearch: (Int) -> Unit,
-    navigateToCardDetail: (String) -> Unit,
+    navigateToCardDetail: (String, Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     canNavigateBack: Boolean = true,
@@ -91,6 +91,7 @@ fun CardsListScreen(
             )
 
             CardsListBody(
+                userId = viewModel.userId,
                 listCards = viewModel.cardsLiveData.value,
                 navigateToCardDetail = navigateToCardDetail
             )
@@ -102,8 +103,9 @@ fun CardsListScreen(
 
 @Composable
 fun CardsListBody(
+    userId: Int,
     listCards: List<CardBrief>?,
-    navigateToCardDetail: (String) -> Unit
+    navigateToCardDetail: (String,Int) -> Unit
 ){
     Column(
         modifier = Modifier
@@ -172,6 +174,7 @@ fun CardsListBody(
             if (cardsWithImages != null) {
                 items(cardsWithImages) { card ->
                     CardItem(
+                        userId = userId,
                         card = card,
                         onClickCard = navigateToCardDetail
                     )
@@ -197,11 +200,12 @@ fun CardsListBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardItem(
+    userId: Int,
     card: CardBrief,
-    onClickCard: (String) -> Unit
+    onClickCard: (String, Int) -> Unit
 ) {
     Card (
-        onClick = { onClickCard(card.id) },
+        onClick = { onClickCard(card.id, userId) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
@@ -213,8 +217,8 @@ fun CardItem(
 
         AsyncImage (
             model = "${card.image}/high.png",
-            placeholder = painterResource(id = R.drawable.yellow),
-            error = painterResource(id = R.drawable.red),
+            placeholder = painterResource(id = R.drawable.loading_img),
+            error = painterResource(id = R.drawable.ic_broken_image),
             contentDescription = null
         )
 
@@ -227,7 +231,8 @@ fun CardsListBodyPreview() {
     PokemonTCGManagerTheme {
         CardsListBody(
             listCards = null,
-            navigateToCardDetail = {}
+            navigateToCardDetail = {_, _ ->},
+            userId = 1
         )
     }
 }
