@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.card
+package be.leocheikhboukal.pokemontcgmanager.ui.card.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,6 +37,7 @@ import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
 import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
+import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardDeleteViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckUiState
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
@@ -48,7 +49,7 @@ object CardDeleteDestination : NavigationDestination {
     override val route = "card_delete"
     const val USER_ID_ARG = "userId"
     const val DECK_ID_ARG = "cardId"
-    val routeWithArgs = "${route}/{$USER_ID_ARG}/{$DECK_ID_ARG}"
+    val routeWithArgs = "$route/{$USER_ID_ARG}/{$DECK_ID_ARG}"
 }
 
 

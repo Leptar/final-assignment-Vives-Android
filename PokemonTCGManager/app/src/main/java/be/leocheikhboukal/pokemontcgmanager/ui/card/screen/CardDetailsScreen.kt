@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.card
+package be.leocheikhboukal.pokemontcgmanager.ui.card.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,6 +36,7 @@ import be.leocheikhboukal.pokemontcgmanager.data.CardCount
 import be.leocheikhboukal.pokemontcgmanager.data.SetBrief
 import be.leocheikhboukal.pokemontcgmanager.data.Variants
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
+import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardDetailsViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import coil.compose.AsyncImage
@@ -44,7 +45,7 @@ object CardDetailsDestination : NavigationDestination {
     override val route = "card_details"
     const val USER_ID_ARG = "userId"
     const val CARD_ID_ARG = "cardId"
-    val routeWithArgs = "${route}/{$USER_ID_ARG}/{$CARD_ID_ARG}"
+    val routeWithArgs = "$route/{$USER_ID_ARG}/{$CARD_ID_ARG}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

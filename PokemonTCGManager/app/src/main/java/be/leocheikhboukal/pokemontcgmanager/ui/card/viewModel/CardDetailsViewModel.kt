@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.card
+package be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.data.TcgdexApi
-import be.leocheikhboukal.pokemontcgmanager.data.user.UserRepository
+import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardDetailsDestination
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class CardDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
-    private val usersRepository: UserRepository
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val cardId: String = checkNotNull(savedStateHandle[CardDetailsDestination.CARD_ID_ARG])
