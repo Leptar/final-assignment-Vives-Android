@@ -75,7 +75,7 @@ fun DeckDetailsScreen(
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
     onAddCardToDeck: (Int, Int) -> Unit,
-    onRemoveCardFromDeck: () -> Unit,
+    onRemoveCardFromDeck: (Int, Int) -> Unit,
     onModifyDeck: (Int) -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
@@ -131,7 +131,7 @@ fun DeckDetailsBody(
     modifier: Modifier = Modifier,
     deckUiState: DeckUiState,
     onAddCardToDeck: (Int, Int) -> Unit,
-    onRemoveCardFromDeck: () -> Unit,
+    onRemoveCardFromDeck: (Int, Int) -> Unit,
     onModifyDeck: (Int) -> Unit,
     onRemoveDeck: () -> Unit,
     navigateToCardDetail: (String, Int) -> Unit,
@@ -287,7 +287,12 @@ fun DeckDetailsBody(
                         )
 
                         Button(
-                            onClick = onRemoveCardFromDeck,
+                            onClick = {
+                                onRemoveCardFromDeck(
+                                    deckUiState.deckDetails.id,
+                                    deckUiState.deckDetails.userId
+                                )
+                            },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(232,236,15),
                                 contentColor = Color.Black
@@ -474,11 +479,11 @@ fun DeckDetailsBodyPreview() {
             deckUiState = DeckUiState(
                 deckDetails = DeckDetails(description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet lectus tempor, tincidunt quam sed, sagittis non.")
             ),
-            onAddCardToDeck = { _ , _ -> },
-            onRemoveCardFromDeck = { },
+            onAddCardToDeck = { _, _ -> },
+            onRemoveCardFromDeck = { _, _ -> },
             onModifyDeck = { },
             onRemoveDeck = { },
-            navigateToCardDetail = { _,_ -> },
+            navigateToCardDetail = { _, _ -> },
             cards = cards
         )
     }

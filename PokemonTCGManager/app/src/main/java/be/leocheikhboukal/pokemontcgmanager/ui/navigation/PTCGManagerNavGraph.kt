@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardAddDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDeleteDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDeleteScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardsListDestination
@@ -145,7 +147,9 @@ fun PTCGManagerNavHost(
                 onAddCardToDeck = { deckId: Int, userId: Int, ->
                     navController.navigate("${CardAddDestination.route}/${userId}/${deckId}")
                 },
-                onRemoveCardFromDeck = { /*TODO*/ },
+                onRemoveCardFromDeck = { deckId: Int, userId: Int, ->
+                    navController.navigate("${CardDeleteDestination.route}/${userId}/${deckId}")
+                },
                 onModifyDeck = {
                     navController.navigate("${DeckModifyDestination.route}/${it}")
                 },
@@ -253,6 +257,36 @@ fun PTCGManagerNavHost(
                 },
                 navigateToCardSearch = {
                     navController.navigate("${CardsListDestination.route}/${it}")
+                }
+            )
+        }
+
+        composable(
+            route = CardDeleteDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(CardDeleteDestination.DECK_ID_ARG) {
+                    type = NavType.IntType
+                },
+                navArgument(CardDeleteDestination.USER_ID_ARG) {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            CardDeleteScreen(
+                navigateToDeckDetails = {
+                    navController.navigate("${DeckDetailsDestination.route}/${it}")
+                },
+                navigateToCardSearch = {
+                    navController.navigate("${CardsListDestination.route}/${it}")
+                },
+                navigateToDeck = {
+                    navController.navigate("${DecksListDestination.route}/${it}")
+                },
+                navigateToUser = {
+                    navController.navigate("${UserDetailsDestination.route}/${it}")
+                },
+                onNavigateUp = {
+                    navController.navigateUp()
                 }
             )
         }

@@ -47,7 +47,7 @@ data class DeckDetails (
     val id: Int = 0,
     val name: String = "test",
     val description: String = "test",
-    val cardList: List<String> = emptyList(),
+    var cardList: List<String> = emptyList(),
     var category: Int = 1,
     val userId: Int = 1
 )

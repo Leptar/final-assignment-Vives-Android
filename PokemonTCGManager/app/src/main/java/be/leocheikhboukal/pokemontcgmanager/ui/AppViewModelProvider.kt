@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import be.leocheikhboukal.pokemontcgmanager.PokemonTCGManagerApplication
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardAddViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDeleteViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardDetailsViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.card.CardsListViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddViewModel
@@ -91,6 +92,14 @@ object AppViewModelProvider {
         // Initializer for CardAddViewModel
         initializer {
             CardAddViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                decksRepository = PokemonTCGManagerApplication().container.decksRepository
+            )
+        }
+
+        // Initializer for CardDeleteViewModel
+        initializer {
+            CardDeleteViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 decksRepository = PokemonTCGManagerApplication().container.decksRepository
             )
