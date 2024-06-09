@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.deck
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.leocheikhboukal.pokemontcgmanager.data.deck.DecksRepository
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckModifyDestination
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

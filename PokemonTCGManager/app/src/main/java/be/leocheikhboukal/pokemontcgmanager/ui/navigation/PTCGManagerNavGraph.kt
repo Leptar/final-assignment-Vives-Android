@@ -15,20 +15,20 @@ import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardDetailsDestinatio
 import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardDetailsScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardsListDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardsListScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckModifyDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckModifyScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckAddDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckDetailsDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckDetailsScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckModifyDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DeckModifyScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DecksListDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DecksListScreen
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.user.UserAddDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.user.UserAddScreen
-import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.user.screen.UserAddDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.user.screen.UserAddScreen
+import be.leocheikhboukal.pokemontcgmanager.ui.user.screen.UserDetailsDestination
+import be.leocheikhboukal.pokemontcgmanager.ui.user.screen.UserDetailsScreen
 
 /**
  * Navigation graph for the application

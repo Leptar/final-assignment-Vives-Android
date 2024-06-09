@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.user
+package be.leocheikhboukal.pokemontcgmanager.ui.user.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.leocheikhboukal.pokemontcgmanager.data.user.UserRepository
+import be.leocheikhboukal.pokemontcgmanager.ui.user.screen.UserDetailsDestination
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

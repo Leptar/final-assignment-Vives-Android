@@ -38,7 +38,7 @@ import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
 import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardDeleteViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckUiState
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckUiState
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import coil.compose.AsyncImage

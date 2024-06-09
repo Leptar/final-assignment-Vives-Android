@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.deck
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
 import be.leocheikhboukal.pokemontcgmanager.data.deck.DecksRepository
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DecksListDestination
 
 class DeckAddViewModel(
     savedStateHandle: SavedStateHandle,

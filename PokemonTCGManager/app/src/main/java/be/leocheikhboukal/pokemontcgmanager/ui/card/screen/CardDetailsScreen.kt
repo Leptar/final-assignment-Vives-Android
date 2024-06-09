@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -105,11 +106,13 @@ fun CardDetailsBody(
         "Energy" -> card.effect.toString()
         "Pokemon" -> card.description.toString()
         "Trainer"-> card.effect.toString()
-        else -> {"No description"}
+        else -> {
+            stringResource(R.string.no_description)
+        }
     }
 
     description = if (description == "null" || description == "")
-        "No description" else description
+        stringResource(R.string.no_description) else description
 
     Column(
         modifier = modifier

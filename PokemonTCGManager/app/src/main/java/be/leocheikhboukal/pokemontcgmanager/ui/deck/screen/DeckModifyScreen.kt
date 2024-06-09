@@ -1,14 +1,15 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.user
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,49 +19,50 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerSubAppBar
 import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
+import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckDetails
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckModifyViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckUiState
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import kotlinx.coroutines.launch
 
-object UserDetailsDestination : NavigationDestination {
-    override val route: String = "user_details"
-    const val USER_ID_ARG = "userId"
-    val routeWithArgs = "$route/{$USER_ID_ARG}"
+object DeckModifyDestination: NavigationDestination {
+    override val route: String = "deck_modify"
+    const val DECK_ID_ARG = "deckId"
+    val routeWithArgs = "$route/{$DECK_ID_ARG}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailsScreen(
-    navigateBack: () -> Unit,
+fun DeckModifyScreen(
+    navigateToDeckDetails: (Int) -> Unit,
     onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
     navigateToCardSearch: (Int) -> Unit,
     navigateToDeck: (Int) -> Unit,
     navigateToUser: (Int) -> Unit,
-    navigateToLogin: () -> Unit,
+    modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
-    viewModel: UserDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DeckModifyViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -79,49 +81,38 @@ fun UserDetailsScreen(
                 .padding(innerPadding)
         ) {
             PTCGManagerSubAppBar(
-                userId = viewModel.userUiState.userDetails.id,
+                userId = viewModel.deckUiState.deckDetails.userId,
                 navigateToCardSearch = navigateToCardSearch,
                 navigateToDecksList = navigateToDeck,
                 navigateToProfile = navigateToUser
             )
-            UserDetailsBody(
+            DeckModifyBody(
                 modifier = Modifier,
-                userUiState = viewModel.userUiState,
-                onUserValueChange = viewModel::updateUiState,
-                navigateToLogin = navigateToLogin,
+                deckUiState = viewModel.deckUiState,
+                onDeckValueChange = viewModel::updateUiState,
                 onSaveClick = {
                     coroutineScope.launch {
-                        viewModel.updateUser()
-                        navigateBack()
+                        viewModel.updateDeck()
+                        navigateToDeckDetails(viewModel.deckUiState.deckDetails.id)
                     }
-                },
-                onRemoveDeck = {
-                    coroutineScope.launch {
-                        viewModel.deleteUser()
-                        navigateToLogin()
-                    }
-                },
+                }
             )
         }
+
     }
 }
 
 @Composable
-fun UserDetailsBody(
+fun DeckModifyBody(
     modifier: Modifier = Modifier,
-    userUiState: UserUiState,
-    onUserValueChange: (UserDetails) -> Unit,
+    deckUiState: DeckUiState,
+    onDeckValueChange: (DeckDetails) -> Unit,
     onSaveClick: () -> Unit,
     enabled: Boolean = true,
-    navigateToLogin: () -> Unit,
-    onRemoveDeck: () -> Unit,
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column(
+    Box(
         modifier = modifier
-            .padding(68.dp)
-            .background(Color(252, 61, 61)),
+            .padding(68.dp),
     ) {
         Column(
             modifier = Modifier
@@ -136,24 +127,35 @@ fun UserDetailsBody(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Profile",
+                text = "Modify Deck",
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier.padding(bottom = 5.dp)
             )
 
-            MyDropdownMenu(userUiState = userUiState)
+            MyDropdownMenu(deckUiState = deckUiState, onValueChange = onDeckValueChange)
 
             OutlinedTextField(
-                value = userUiState.userDetails.name,
-                onValueChange = { onUserValueChange(userUiState.userDetails.copy(name = it)) },
-                label = { Text("Name*") },
+                value = deckUiState.deckDetails.name,
+                onValueChange = { onDeckValueChange(deckUiState.deckDetails.copy(name = it)) },
+                label = { Text(stringResource(R.string.name_needed)) },
                 modifier = Modifier
                     .fillMaxWidth()
-
                     .padding(16.dp),
                 enabled = enabled,
                 singleLine = true,
+            )
+
+            OutlinedTextField(
+                value = deckUiState.deckDetails.description,
+                onValueChange = { onDeckValueChange(deckUiState.deckDetails.copy(description = it)) },
+                label = { Text(text ="Description") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                enabled = enabled,
+                maxLines = 4,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
 
             Button(
@@ -165,66 +167,9 @@ fun UserDetailsBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp, vertical = 20.dp),
-                enabled = userUiState.isEntryValid,
+                enabled = deckUiState.isEntryValid,
                 border = BorderStroke(1.dp, Color.Black),
-                content = { Text("Modify Profile") }
-            )
-        }
-
-        Button(
-            onClick = navigateToLogin,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 50.dp, vertical = 15.dp),
-            border = BorderStroke(1.dp, Color.Black),
-            shape = RoundedCornerShape(10.dp),
-            content = { Text("Switch Profile") }
-        )
-
-        Button(
-            onClick = { showDialog = true },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(232,236,15),
-                contentColor = Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 50.dp),
-            border = BorderStroke(3.dp, Color.Black),
-            shape = RoundedCornerShape(10.dp),
-            content = {
-                Text(
-                    text = "Delete Profile",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
-                )
-            }
-        )
-
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Confirm Deletion") },
-                text = { Text("Are you sure you want to delete this profile ? You will lost all your decks") },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            onRemoveDeck() // Call the onRemoveDeck lambda
-                            showDialog = false
-                        }
-                    ) {
-                        Text("Delete")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("Cancel")
-                    }
-                }
+                content = { Text("Save Changes") }
             )
         }
     }
@@ -232,14 +177,12 @@ fun UserDetailsBody(
 
 @Preview(showBackground = true)
 @Composable
-fun UserDetailsBodyPreview() {
+fun DeckModifyBodyPreview() {
     PokemonTCGManagerTheme {
-        UserDetailsBody(
-            userUiState = UserUiState(),
-            onUserValueChange = {},
+        DeckAddBody(
             onSaveClick = {},
-            navigateToLogin = { },
-            onRemoveDeck = {}
+            deckUiState = DeckUiState(),
+            onDeckValueChange = {}
         )
     }
 }

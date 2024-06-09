@@ -4,4 +4,6 @@
     <string name="category_need_to_test">Need to test</string>
     <string name="category_need_to_change">Need to change</string>
     <string name="category_not_finished">Not finished</string>
+    <string name="no_description">No description</string>
+    <string name="name_needed">Name*</string>
 </resources>

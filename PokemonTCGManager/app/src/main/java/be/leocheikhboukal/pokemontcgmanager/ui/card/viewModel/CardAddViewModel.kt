@@ -14,9 +14,9 @@ import be.leocheikhboukal.pokemontcgmanager.ui.card.getCardByName
 import be.leocheikhboukal.pokemontcgmanager.ui.card.getCardDetails
 import be.leocheikhboukal.pokemontcgmanager.ui.card.getCards
 import be.leocheikhboukal.pokemontcgmanager.ui.card.screen.CardAddDestination
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckUiState
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.toDeck
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.toDeckUiState
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckUiState
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.toDeck
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.toDeckUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first

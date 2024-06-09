@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.user
+package be.leocheikhboukal.pokemontcgmanager.ui.user.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

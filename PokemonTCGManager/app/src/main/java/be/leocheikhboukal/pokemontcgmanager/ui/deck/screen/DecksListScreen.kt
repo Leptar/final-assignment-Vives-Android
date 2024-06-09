@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.deck
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -44,6 +44,8 @@ import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
 import be.leocheikhboukal.pokemontcgmanager.data.user.User
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DecksListViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.UserWithDecksUiState
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 

@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.deck
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import be.leocheikhboukal.pokemontcgmanager.data.deck.Deck
 import be.leocheikhboukal.pokemontcgmanager.data.user.User
 import be.leocheikhboukal.pokemontcgmanager.data.user.UserRepository
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.screen.DecksListDestination
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull

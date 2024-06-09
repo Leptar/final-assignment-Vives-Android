@@ -11,13 +11,13 @@ import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardAddViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardDeleteViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardDetailsViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.card.viewModel.CardsListViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckAddViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckDetailsViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DeckModifyViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.deck.DecksListViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckAddViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckDetailsViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckModifyViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DecksListViewModel
 import be.leocheikhboukal.pokemontcgmanager.ui.home.HomeViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.user.ProfileAddViewModel
-import be.leocheikhboukal.pokemontcgmanager.ui.user.UserDetailsViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.user.viewModel.ProfileAddViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.user.viewModel.UserDetailsViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app

@@ -1,4 +1,4 @@
-package be.leocheikhboukal.pokemontcgmanager.ui.deck
+package be.leocheikhboukal.pokemontcgmanager.ui.deck.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +53,9 @@ import be.leocheikhboukal.pokemontcgmanager.PTCGManagerTitleAppBar
 import be.leocheikhboukal.pokemontcgmanager.R
 import be.leocheikhboukal.pokemontcgmanager.data.Card
 import be.leocheikhboukal.pokemontcgmanager.ui.AppViewModelProvider
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckDetails
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckDetailsViewModel
+import be.leocheikhboukal.pokemontcgmanager.ui.deck.viewModel.DeckUiState
 import be.leocheikhboukal.pokemontcgmanager.ui.navigation.NavigationDestination
 import be.leocheikhboukal.pokemontcgmanager.ui.theme.PokemonTCGManagerTheme
 import coil.compose.AsyncImage
@@ -184,7 +188,7 @@ fun DeckDetailsBody(
                 ) {
                     val description =
                         deckUiState.deckDetails.description.ifEmpty {
-                            "No description"
+                            stringResource(R.string.no_description)
                         }
                     Text(
                         text = description,
