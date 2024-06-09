@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +18,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -89,7 +94,13 @@ fun UserDetailsScreen(
                         viewModel.updateUser()
                         navigateBack()
                     }
-                }
+                },
+                onRemoveDeck = {
+                    coroutineScope.launch {
+                        viewModel.deleteUser()
+                        navigateToLogin()
+                    }
+                },
             )
         }
     }
@@ -102,8 +113,11 @@ fun UserDetailsBody(
     onUserValueChange: (UserDetails) -> Unit,
     onSaveClick: () -> Unit,
     enabled: Boolean = true,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    onRemoveDeck: () -> Unit,
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .padding(68.dp)
@@ -172,7 +186,7 @@ fun UserDetailsBody(
         )
 
         Button(
-            onClick = { },
+            onClick = { showDialog = true },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(232,236,15),
                 contentColor = Color.Black
@@ -190,6 +204,29 @@ fun UserDetailsBody(
                 )
             }
         )
+
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Confirm Deletion") },
+                text = { Text("Are you sure you want to delete this profile ? You will lost all your decks") },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            onRemoveDeck() // Call the onRemoveDeck lambda
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Delete")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { showDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -201,7 +238,8 @@ fun UserDetailsBodyPreview() {
             userUiState = UserUiState(),
             onUserValueChange = {},
             onSaveClick = {},
-            navigateToLogin = { }
+            navigateToLogin = { },
+            onRemoveDeck = {}
         )
     }
 }

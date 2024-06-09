@@ -40,6 +40,13 @@ class UserDetailsViewModel(
     }
 
     /**
+     * Deletes the user from the [UserRepository]'s data source
+     */
+    suspend fun deleteUser() {
+        userRepository.deleteUser(userUiState.userDetails.toUser())
+    }
+
+    /**
      * Update the user in the [UserRepository]'s data source
      */
     suspend fun updateUser() {
